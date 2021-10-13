@@ -523,7 +523,11 @@ object Checking {
     if (sym.isConstructor && !sym.isPrimaryConstructor && sym.owner.is(Trait, butNot = JavaDefined))
       val addendum = if ctx.settings.Ydebug.value then s" ${sym.owner.flagsString}" else ""
       fail("Traits cannot have secondary constructors" + addendum)
-    checkApplicable(Inline, sym.isTerm && !sym.isOneOf(Mutable | Module))
+    checkApplicable(Inline, sym.isTerm && !sym.isOneOf(Module))
+    if(sym.isAllOf(Inline | Mutable)) {
+      sym.resetFlag(Inline) // Don't want to trigger the type checker to act like this is an inline var
+      sym.setFlag(JavaDefined) // Pretend this field is a Java field.
+    }
     checkApplicable(Lazy, !sym.isOneOf(Method | Mutable))
     if (sym.isType && !sym.is(Deferred))
       for (cls <- sym.allOverriddenSymbols.filter(_.isClass)) {

@@ -44,6 +44,7 @@ import collection.mutable
  *   - private[this] fields in classes (excluding traits, value classes)
  *   - fields generated for static modules (TODO: needed?)
  *   - parameters, static fields, and fields coming from Java
+ *   - inline var fields are treated identically to fields coming from Java
  *
  *  The rhs is computed later, in phase Memoize.
  *
